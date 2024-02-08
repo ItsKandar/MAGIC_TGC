@@ -3,5 +3,15 @@ Temp/
 .vs/
 .vscode/
 Logs/
-Assets/
 Library/
+*.meta
+*.prefab
+*.mat 
+Assets/Brick*
+*.fbx
+*.unity
+*.tga
+*.Asset 
+*.exr 
+*.shader
+*.cginc 
