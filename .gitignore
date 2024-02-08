@@ -13,5 +13,4 @@ Assets/Brick*
 *.tga
 *.Asset 
 *.exr 
-*.shader
 *.cginc 
