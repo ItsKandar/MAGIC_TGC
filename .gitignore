@@ -4,7 +4,6 @@ Temp/
 .vscode/
 Logs/
 Library/
-*.prefab
 *.mat
 *.fbx
 *.unity
