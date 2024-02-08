@@ -10,5 +10,4 @@ Library/
 Assets/Brick*
 *.fbx
 *.unity
-*.tga
-*.Asset  
+*.Asset
