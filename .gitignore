@@ -2,4 +2,9 @@ Temp/
 .vsconfig
 .vs/
 .vscode/
-*/
+Logs/
+Packages/
+UserSettings/
+Assets/
+Library/
+ProjectSettings/

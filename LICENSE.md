@@ -1,1 +1,1 @@
-Copyright 2023 Gino Valton, Nathan Moreau, and contributors
+Copyright 2024 Gino Valton, Nathan Moreau, and contributors
