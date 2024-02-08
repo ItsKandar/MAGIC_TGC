@@ -6,8 +6,7 @@ Logs/
 Library/
 *.meta
 *.prefab
-*.mat 
-Assets/Brick*
+*.mat
 *.fbx
 *.unity
 *.Asset
