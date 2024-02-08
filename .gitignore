@@ -11,6 +11,4 @@ Assets/Brick*
 *.fbx
 *.unity
 *.tga
-*.Asset 
-*.exr 
-*.cginc 
+*.Asset  
