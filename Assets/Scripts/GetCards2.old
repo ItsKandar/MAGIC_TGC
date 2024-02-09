@@ -1,7 +1,8 @@
 // Allows the user to search for cards using MTG api (https://api.magicthegathering.io/v1/)
 
 using System.Collections;
-using System.Text; // For StringBuilder
+using System.Text;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
@@ -9,15 +10,11 @@ using System.Linq;
 
 public class GetCards : MonoBehaviour
 {
-    public UnityEngine.UI.InputField searchBar;
-    public Button searchButton;
-    public Text resultListText;
-    public Image cardImage;
-    public GameObject SearchMenu;
-    public Button closeButton;
-    public Button openSearchButton;
-    public Button BackFromCloset;
-
+    public UnityEngine.UI.InputField searchBar; // Barre de recherche
+    public Button searchButton; // Bouton pour lancer la recherche
+    public Text resultListText; // Texte pour afficher les résultats
+    public Image cardImage; // Image pour afficher la carte
+    public Dropdown SetSelector; // Dropdown pour sélectionner le set
 
     void Start()
     {
@@ -25,24 +22,6 @@ public class GetCards : MonoBehaviour
         {
             searchButton.onClick.AddListener(OnSearchClicked);
         }
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(ToggleSearchMenu);
-        }
-        if (openSearchButton != null)
-        {
-            openSearchButton.onClick.AddListener(() => ToggleSearchMenu()); // Pour ouvrir
-        }
-
-    SearchMenu.SetActive(false); // Menu fermé au démarrage
-    }
-
-    void ToggleSearchMenu()
-    {
-        Debug.Log("ToggleSearchMenu");
-        openSearchButton.gameObject.SetActive(!openSearchButton.gameObject.activeSelf); // Inverse l'état actuel du bouton
-        BackFromCloset.gameObject.SetActive(!BackFromCloset.gameObject.activeSelf); // Inverse l'état actuel du bouton
-        SearchMenu.SetActive(!SearchMenu.activeSelf); // Inverse l'état actuel du menu de recherche
     }
 
     void OnSearchClicked()
@@ -74,82 +53,82 @@ public class GetCards : MonoBehaviour
 
     void DisplayCardList(MTGCardResponse response)
     {
+        SetSelector.ClearOptions();
+        SetSelector.onValueChanged.RemoveAllListeners();
+
         if (response.cards != null && response.cards.Length > 0)
         {
-            StringBuilder sb = new StringBuilder();
+            List<string> options = new List<string>();
+            cardVersionsBySet.Clear();
+            
+            // N'afficher que le mutiverseid élevé
             foreach (var card in response.cards)
             {
-                // Recherche des informations de la carte en français
-                var frenchCardInfo = card.foreignNames?.FirstOrDefault(fn => fn.language == "French");
-                if (frenchCardInfo != null)
+                foreach (var foreignName in card.foreignNames.Where(fn => fn.language == "French"))
                 {
-                    sb.Clear();
-                    // Utilisez frenchCardInfo pour afficher les détails de la carte en français
-                    sb.AppendLine($"<b>{frenchCardInfo.name}</b>");
-                    sb.AppendLine($"- Couleurs: {card.colors}");
-                    sb.AppendLine($"- Coût: {card.manaCost} ({card.cmc})");
-                    if (frenchCardInfo.type != null)
+                    string option = $"{foreignName.setName} - {foreignName.name}";
+                    if (!cardVersionsBySet.ContainsKey(card.name))
                     {
-                        sb.AppendLine($"- Types: {frenchCardInfo.type}");
+                        cardVersionsBySet[card.name] = new Dictionary<string, MTGCard.ForeignName>();
                     }
-                    sb.AppendLine($"{frenchCardInfo.text}\n");
-                    if (frenchCardInfo.flavor != null)
+                    if (!cardVersionsBySet[card.name].ContainsKey(foreignName.setName))
                     {
-                        sb.AppendLine($"<i>{frenchCardInfo.flavor}</i>\n");
+                        cardVersionsBySet[card.name][foreignName.setName] = foreignName;
+                        options.Add(option);
                     }
-                    if (card.power != null && card.toughness != null)
-                    {
-                        sb.AppendLine($"- P/T: {card.power}/{card.toughness}");
-                    }
-                    if (card.colorIdentity != null)
-                    {
-                        sb.AppendLine($"- Identité de couleur: {card.colorIdentity}");
-                    }
-                    sb.AppendLine($"- Rareté: {card.rarity}\n");
-                    sb.AppendLine($"<i>Version française de la carte</i>\n");
-                    DisplayCardImage(frenchCardInfo.imageUrl);
-                }
-                else
-                {
-                    // Si aucune version française n'est trouvée, affichez les informations de base de la carte
-                    sb.AppendLine($"<b>{card.name}</b>");
-                    sb.AppendLine($"- Couleurs: {card.colors}");
-                    sb.AppendLine($"- Coût: {card.manaCost} ({card.cmc})");
-                    if (card.type != null)
-                    {
-                        sb.AppendLine($"- Types : {card.type}");
-                    }
-                    sb.AppendLine($"{card.text}\n");
-                    if (card.flavor != null)
-                    {
-                        sb.AppendLine($"<i>{card.flavor}</i>\n");
-                    }
-                    if (card.power != null && card.toughness != null)
-                    {
-                        sb.AppendLine($"- P/T: {card.power}/{card.toughness}");
-                    }
-                    if (card.colorIdentity != null)
-                    {
-                        sb.AppendLine($"- Identité de couleur: {card.colorIdentity}");
-                    }
-                    sb.AppendLine($"- Rareté: {card.rarity}\n");
-                    sb.AppendLine($"<i>Version anglaise de la carte</i>\n");
-                    DisplayCardImage(card.imageUrl);
                 }
             }
-            resultListText.text = sb.ToString();
+
+            SetSelector.AddOptions(options);
+            SetSelector.onValueChanged.AddListener(delegate { OnSetSelected(); });
         }
         else
         {
             resultListText.text = "Aucune carte trouvée, assurez-vous que la carte existe et que le nom est correct et en Français.";
         }
     }
+    void OnSetSelected()
+    {
+        if (SetSelector.options.Count > 0 && SetSelector.value < SetSelector.options.Count)
+        {
+            string selectedOption = SetSelector.options[SetSelector.value].text;
+            string setName = selectedOption.Split('-')[0].Trim();
+            string cardName = selectedOption.Split('-')[1].Trim();
 
+            foreach (var cardEntry in cardVersionsBySet)
+            {
+                if (cardEntry.Key == cardName && cardEntry.Value.ContainsKey(setName))
+                {
+                    DisplayCardDetails(cardEntry.Value[setName]);
+                    break;
+                }
+            }
+        }
+    }   
+    void DisplayCardDetails(ForeignName selectedCard)
+    {
+        // Affichez les détails de la version sélectionnée
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"<b>{selectedCard.name}</b>");
+        sb.AppendLine($"- Couleurs: {selectedCard.colors}");
+        sb.AppendLine($"- Coût: {selectedCard.manaCost} ({card.cmc})");
+        sb.AppendLine($"- Types: {selectedCard.type}");
+        sb.AppendLine($"{selectedCard.text}\n");
+        sb.AppendLine($"<i>{selectedCard.flavor ?? "N/A"}</i>\n");
+        sb.AppendLine($"{selectedCard.text}\n");
+        sb.AppendLine($"<i>{selectedCard.flavor}</i>\n");
+        sb.AppendLine($"- P/T: {selectedCard.power}/{selectedCard.toughness}");
+        sb.AppendLine($"- Identité de couleur: {selectedCard.colorIdentity}");
+        sb.AppendLine($"- Rareté: {selectedCard.rarity}\n");
+        sb.AppendLine($"- Set: {selectedCard.setName}\n");
+        sb.AppendLine($"<i>Version française de la carte</i>\n");
+        resultListText.text = sb.ToString();
+        DisplayCardImage(selectedCard.imageUrl);
+    }
     void DisplayCardImage(string imageUrl)
     {
         StartCoroutine(FetchImage(imageUrl));
-    }
-
+    }   
     IEnumerator FetchImage(string imageUrl)
     {
          // Convertir l'URL en HTTPS si nécessaire
@@ -175,7 +154,6 @@ public class GetCards : MonoBehaviour
             }
         }
     }
-
     [System.Serializable]
     private class ForeignName
     {
