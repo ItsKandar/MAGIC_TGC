@@ -13,36 +13,13 @@ public class GetCards : MonoBehaviour
     public Button searchButton;
     public Text resultListText;
     public Image cardImage;
-    public GameObject SearchMenu;
-    public Button closeButton;
-    public Button openSearchButton;
-    public Button BackFromCloset;
-
 
     void Start()
     {
         if (searchButton != null)
         {
-            searchButton.onClick.AddListener(OnSearchClicked);
+            searchButton.onClick.AddListener(() => OnSearchClicked()); // Pour lancer la recherche
         }
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(ToggleSearchMenu);
-        }
-        if (openSearchButton != null)
-        {
-            openSearchButton.onClick.AddListener(() => ToggleSearchMenu()); // Pour ouvrir
-        }
-
-    SearchMenu.SetActive(false); // Menu fermé au démarrage
-    }
-
-    void ToggleSearchMenu()
-    {
-        Debug.Log("ToggleSearchMenu");
-        openSearchButton.gameObject.SetActive(!openSearchButton.gameObject.activeSelf); // Inverse l'état actuel du bouton
-        BackFromCloset.gameObject.SetActive(!BackFromCloset.gameObject.activeSelf); // Inverse l'état actuel du bouton
-        SearchMenu.SetActive(!SearchMenu.activeSelf); // Inverse l'état actuel du menu de recherche
     }
 
     void OnSearchClicked()

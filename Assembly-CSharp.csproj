@@ -53,12 +53,14 @@
      <Compile Include="Assets\Brick Project Studio\_BPS Basic Assets\Common\Scripts and Animations\First Person Player\MouseLook.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
      <Compile Include="Assets\Brick Project Studio\Apartment Kit\Common\Scripts &amp; Animation\Closet\ClosetopencloseDoor.cs" />
+     <Compile Include="Assets\Scripts\MenuDeckManager.cs" />
      <Compile Include="Assets\Brick Project Studio\Apartment Kit\Common\Scripts &amp; Animation\Z Axis -1\Drawer_Pull_Zopp.cs" />
      <Compile Include="Assets\Brick Project Studio\_BPS Basic Assets\Common\Scripts and Animations\Windows\opencloseWindow1.cs" />
      <Compile Include="Assets\Brick Project Studio\Apartment Kit\Common\Scripts &amp; Animation\TableFlip\TableFlipR.cs" />
      <Compile Include="Assets\Brick Project Studio\Apartment Kit\Common\Scripts &amp; Animation\Windows\opencloseWindowApt.cs" />
      <Compile Include="Assets\Brick Project Studio\_BPS Basic Assets\Common\Scripts and Animations\First Person Player\PlayerMovement.cs" />
      <Compile Include="Assets\Brick Project Studio\_BPS Basic Assets\Common\Scripts and Animations\Drawer\X Axis\Drawer_Pull_X.cs" />
+     <Compile Include="Assets\Scripts\MenuCloset.cs" />
      <Compile Include="Assets\Brick Project Studio\Apartment Kit\Common\Scripts &amp; Animation\OvenOpen\OvenFlip.cs" />
      <Compile Include="Assets\Brick Project Studio\_BPS Basic Assets\Common\Scripts and Animations\Doors\opencloseStallDoor.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
