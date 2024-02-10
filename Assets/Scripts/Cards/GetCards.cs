@@ -1,5 +1,6 @@
 // Allows the user to search for cards using MTG api (https://api.magicthegathering.io/v1/)
 
+using System;
 using System.Collections;
 using System.Text; // For StringBuilder
 using UnityEngine;
@@ -197,5 +198,67 @@ public class GetCards : MonoBehaviour
         public string multiverseid;
         public string imageUrl;
         public string rulings;
+    }
+}
+
+[Serializable]
+public class CardInfo
+{
+    public string Name { get; set; }
+    public string[] Colors { get; set; }
+    public string ManaCost { get; set; }
+    public float Cmc { get; set; } // Coût de mana converti
+    public string Type { get; set; }
+    public string Text { get; set; }
+    public string Flavor { get; set; } // Texte d'ambiance
+    public string Power { get; set; } // Force
+    public string Toughness { get; set; } // Endurance
+    public string[] ColorIdentity { get; set; }
+    public string Rarity { get; set; } // Rareté
+    public string ImageUrl { get; set; }
+
+    // Constructeur sans paramètres pour la sérialisation/désérialisation
+    public CardInfo() { }
+
+    // Constructeur pour initialiser facilement une instance
+    public CardInfo(string name, string[] colors, string manaCost, float cmc, string type, 
+                    string text, string flavor, string power, string toughness, 
+                    string[] colorIdentity, string rarity, string imageUrl)
+    {
+        Name = name;
+        Colors = colors;
+        ManaCost = manaCost;
+        Cmc = cmc;
+        Type = type;
+        Text = text;
+        Flavor = flavor;
+        Power = power;
+        Toughness = toughness;
+        ColorIdentity = colorIdentity;
+        Rarity = rarity;
+        ImageUrl = imageUrl;
+    }
+
+    // Méthode pour générer la description de la carte
+    public string GetCardDescription()
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.AppendLine($"<b>{Name}</b>");
+        sb.AppendLine($"- Couleurs: {string.Join(", ", Colors)}");
+        sb.AppendLine($"- Coût: {ManaCost} ({Cmc})");
+        if (!string.IsNullOrEmpty(Type))
+            sb.AppendLine($"- Types: {Type}");
+        if (!string.IsNullOrEmpty(Text))
+            sb.AppendLine($"{Text}\n");
+        if (!string.IsNullOrEmpty(Flavor))
+            sb.AppendLine($"<i>{Flavor}</i>\n");
+        if (!string.IsNullOrEmpty(Power) && !string.IsNullOrEmpty(Toughness))
+            sb.AppendLine($"- P/T: {Power}/{Toughness}");
+        if (ColorIdentity != null && ColorIdentity.Length > 0)
+            sb.AppendLine($"- Identité de couleur: {string.Join(", ", ColorIdentity)}");
+        sb.AppendLine($"- Rareté: {Rarity}\n");
+        sb.AppendLine($"<i>Version française de la carte</i>\n");
+
+        return sb.ToString();
     }
 }
