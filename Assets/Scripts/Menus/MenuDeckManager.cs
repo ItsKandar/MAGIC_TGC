@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DeckManager : MonoBehaviour
+public class MenuDeckManager : MonoBehaviour
 {
     public GameObject MainDeckMenu;
     public GameObject MyDeckMenu;
@@ -48,6 +48,12 @@ public class DeckManager : MonoBehaviour
         // Disable the precon and my deck menus
         preconMenu.SetActive(false);
         MyDeckMenu.SetActive(false);
+
+        // Enable the buttons
+        buttons.SetActive(true);
+        MyDeckButton.gameObject.SetActive(true);
+        PreconButton.gameObject.SetActive(true);
+        BackFromPrecon.gameObject.SetActive(true);
 
         // Add listeners to the buttons
         PreconButton.onClick.AddListener(() => SwitchMenu(preconMenu));
