@@ -5,3 +5,4 @@ Temp/
 Logs/
 Library/
 UserSettings/
+*.csproj
