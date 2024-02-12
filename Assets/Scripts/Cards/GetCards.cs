@@ -8,6 +8,9 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Linq;
 
+// Create a db
+
+
 public class GetCards : MonoBehaviour
 {
     public UnityEngine.UI.InputField searchBar;
@@ -86,6 +89,7 @@ public class GetCards : MonoBehaviour
                     sb.AppendLine($"- Rareté: {card.rarity}\n");
                     sb.AppendLine($"<i>Version française de la carte</i>\n");
                     DisplayCardImage(frenchCardInfo.imageUrl);
+                    break;
                 }
                 else
                 {
@@ -113,6 +117,7 @@ public class GetCards : MonoBehaviour
                     sb.AppendLine($"- Rareté: {card.rarity}\n");
                     sb.AppendLine($"<i>Version anglaise de la carte</i>\n");
                     DisplayCardImage(card.imageUrl);
+                    break;
                 }
             }
             resultListText.text = sb.ToString();
