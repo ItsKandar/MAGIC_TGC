@@ -6,6 +6,9 @@ public class DeckManager : MonoBehaviour
     // Liste représentant le deck de l'utilisateur avec les cartes qu'il contient.
     public List<CardInfo> userDeck = new List<CardInfo>();
 
+    // Référence à CardDatabase
+    public CardDatabase cardDatabase; // Assignez cette référence dans l'inspecteur Unity
+
     private void Awake()
     {
         // Charger le deck de l'utilisateur au démarrage du jeu
@@ -58,6 +61,21 @@ public class DeckManager : MonoBehaviour
         {
             // Si aucun deck n'est sauvegardé, initialise userDeck avec une liste vide
             userDeck = new List<CardInfo>();
+        }
+    }
+
+    // Méthode pour récupérer toutes les cartes de la base de données
+    public void GetAllCardsFromDatabase()
+    {
+        if (cardDatabase != null)
+        {
+            // Récupère toutes les cartes de la base de données et les ajoute à userDeck
+            userDeck = cardDatabase.GetAllCards();
+            SaveDeck(); // Optionnel, si vous souhaitez sauvegarder immédiatement cette liste comme le deck de l'utilisateur
+        }
+        else
+        {
+            Debug.LogError("CardDatabase is not assigned in DeckManager.");
         }
     }
 
