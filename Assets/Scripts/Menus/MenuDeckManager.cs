@@ -55,7 +55,6 @@ public class MenuDeckManager : MonoBehaviour
         BackFromPrecon.onClick.AddListener(() => SwitchMenu(MainDeckMenu));
         BackFromMyDeck.onClick.AddListener(() => SwitchMenu(MainDeckMenu));
         CreateDeckButton.onClick.AddListener(CreateNewDeck);
-        GetAllCards.onClick.AddListener(ShowMyCards);
     }
 
     void ShowMyDecks()
@@ -75,26 +74,6 @@ public class MenuDeckManager : MonoBehaviour
             GameObject listItem = Instantiate(deckListItemPrefab, deckListContainer);
             listItem.GetComponent<Text>().text = deck.Name; // Assurez-vous que votre prefab a un composant Text pour afficher le nom
             // Ajoutez ici plus de logique pour afficher les détails du deck ou pour interagir avec lui
-        }
-    }
-
-  public void ShowMyCards()
-    {
-        // Affiche le menu qui montre toutes les cartes
-        SwitchMenu(AllCardsContainer); // Assurez-vous d'avoir un GameObject qui sert de conteneur pour toutes les cartes
-
-        // Supprime les anciens éléments de la liste pour actualiser
-        foreach (Transform child in AllCardsContainer.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // Parcourt toutes les cartes dans la base de données
-        foreach (var card in cardDatabase.GetAllCards()) // Assurez-vous que cette méthode existe et fonctionne correctement dans CardDatabase
-        {
-            GameObject listItem = Instantiate(deckListItemPrefab, AllCardsContainer.transform);
-            listItem.GetComponent<Text>().text = card.Name; // Adaptez cette ligne si votre prefab utilise un autre moyen pour afficher le nom
-            // Vous pouvez étendre ceci pour afficher plus d'informations sur chaque carte
         }
     }
 

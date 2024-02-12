@@ -51,6 +51,7 @@
                 // La carte n'est pas trouvée localement, faire une requête API
                 StartCoroutine(FetchCardFromAPI(cardName));
             }
+            // Debug.Log(database.GetAllCards());
         }
 
         // Si la carte existe deja dans la BDD
@@ -150,7 +151,7 @@
                             card.rarity,
                             frenchCardInfo.imageUrl ?? card.imageUrl // Utilisez l'URL de l'image française si disponible
                         );
-                        
+                        Debug.Log(newCardInfo);
                         // Récupérer la base de données existante ou en créer une nouvelle
                         CardDatabase database = CardDatabase.LoadDatabase();
                         

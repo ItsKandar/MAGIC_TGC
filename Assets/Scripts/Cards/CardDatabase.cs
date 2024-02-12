@@ -21,6 +21,7 @@ public class CardDatabase : ScriptableObject
         if (!cards.Exists(card => card.Name == newCard.Name))
         {
             cards.Add(newCard);
+            Debug.Log("Card added to database : " + newCard.Name);
         }
     }
 
@@ -30,6 +31,7 @@ public class CardDatabase : ScriptableObject
         string json = JsonUtility.ToJson(this);
         PlayerPrefs.SetString("CardDatabase", json);
         PlayerPrefs.Save();
+        Debug.Log("Database saved");
     }
 
     // Dans CardDatabase.cs
@@ -39,8 +41,10 @@ public class CardDatabase : ScriptableObject
         if (string.IsNullOrEmpty(name)) return null;
         Debug.Log("Searching for card : " + name);
         // Retourne le premier CardInfo qui correspond au nom, en s'assurant que card et card.Name ne sont pas nulls
-        return cards.FirstOrDefault(card => card != null && !string.IsNullOrEmpty(card.Name) && card.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-    }
+        var DBRequest = cards.FirstOrDefault(card => card != null && !string.IsNullOrEmpty(card.Name) && card.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        Debug.Log("Card found : " + DBRequest);
+        return DBRequest;
+        }
 
     // Méthode pour charger la base de données
     public static CardDatabase LoadDatabase()
