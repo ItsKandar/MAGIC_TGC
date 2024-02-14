@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class MenuDeckManager : MonoBehaviour
 {
+    public DeckManager deckManager; // Assignez cette référence dans l'inspecteur Unity
+    public InputField newDeckNameInputField; // Assignez ce champ dans l'éditeur Unity
     public GameObject MainDeckMenu;
     public GameObject MyDeckMenu;
     public GameObject preconMenu;
@@ -13,12 +15,7 @@ public class MenuDeckManager : MonoBehaviour
     public Button MyDeckButton;
     public Button BackFromPrecon;
     public Button BackFromMyDeck;
-    public Button GetAllCards;
-    public GameObject AllCardsContainer;
     public Button CreateDeckButton; // Bouton pour créer un nouveau deck
-
-    public DeckManager deckManager; // Référence au DeckManager
-
     public Transform deckListContainer; // Conteneur pour lister les decks
     public GameObject deckListItemPrefab; // Prefab pour un élément de liste de deck
 
@@ -59,32 +56,45 @@ public class MenuDeckManager : MonoBehaviour
 
     void ShowMyDecks()
     {
-        // Affiche le menu MyDeck et liste tous les decks existants
         SwitchMenu(MyDeckMenu);
 
-        // Supprime les anciens éléments de la liste (pour actualiser)
         foreach (Transform child in deckListContainer)
         {
             Destroy(child.gameObject);
         }
 
-        // Pour chaque deck dans DeckManager, crée un nouvel élément dans l'interface utilisateur
-        foreach (var deck in deckManager.userDeck)
+        // Assurez-vous que cette méthode existe et retourne une List<DeckInfo>
+        foreach (var deck in deckManager.GetDecks())
         {
             GameObject listItem = Instantiate(deckListItemPrefab, deckListContainer);
-            listItem.GetComponent<Text>().text = deck.Name; // Assurez-vous que votre prefab a un composant Text pour afficher le nom
-            // Ajoutez ici plus de logique pour afficher les détails du deck ou pour interagir avec lui
+            var textComponent = listItem.GetComponent<Text>();
+            if (textComponent != null)
+            {
+                textComponent.text = deck.deckName; // Utilisez `deckName` pour le nom du deck
+            }
+            else
+            {
+                Debug.LogError("Text component not found in deck list item prefab.");
+            }
+            // Vous pouvez étendre ici pour inclure d'autres informations sur le deck
         }
     }
 
     void CreateNewDeck()
     {
-        // Logique pour créer un nouveau deck
-        Debug.Log("Création d'un nouveau deck...");
-
-        // Ici, vous pourriez ouvrir une nouvelle interface permettant à l'utilisateur de choisir des cartes pour le nouveau deck
-        // et ensuite l'ajouter à deckManager.userDeck
+        string newDeckName = newDeckNameInputField.text;
+        if (!string.IsNullOrWhiteSpace(newDeckName))
+        {
+            deckManager.AddDeck(newDeckName);
+            newDeckNameInputField.text = ""; // Réinitialiser le champ de texte
+            ShowMyDecks(); // Actualiser l'affichage des decks
+        }
+        else
+        {
+            Debug.LogError("Deck name cannot be empty.");
+        }
     }
+
 
     // Update est laissé vide si non utilisé
     void Update()
