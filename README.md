@@ -33,6 +33,9 @@ Ce projet est sous licence [MIT](LICENSE.md).
 
 ## Crédits
 
+Musiques :
+[https://www.youtube.com/watch?v=E_Z621xfTDc](https://www.youtube.com/watch?v=E_Z621xfTDc)
+
 Assets utilisées :
 - [Rustic Small Cabinet](https://assetstore.unity.com/packages/3d/props/furniture/rustic-small-cabinet-246869)
 - [Minimalist ArchViz Bedroom](https://assetstore.unity.com/packages/3d/environments/minimalist-archviz-bedroom-131093)

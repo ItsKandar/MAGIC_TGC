@@ -15,7 +15,6 @@ public class ManageDeck : MonoBehaviour
     public Transform deckListContainer; // Conteneur pour les éléments de liste de decks
     public GameObject deckListItemPrefab; // Préfabriqué pour les éléments de liste de decks
     public InputField newDeckNameInputField; // Champ de texte pour le nom du nouveau deck
-    public Button ListDeckButton; // Bouton pour lister les decks
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +27,6 @@ public class ManageDeck : MonoBehaviour
 
         // Ajoute des listeneres
         CreateDeckButton.onClick.AddListener(CreateNewDeck);
-        ListDeckButton.onClick.AddListener(ListDecks);
     }
     
     void ListDecks()
@@ -99,6 +97,7 @@ public class ManageDeck : MonoBehaviour
             database.AddDeck("Unnamed Deck");
             ShowDeck(newDeckName); // Actualiser l'affichage des decks
         }
+        ListDecks();
     }
 
     // Update is called once per frame
