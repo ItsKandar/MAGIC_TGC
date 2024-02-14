@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 
 [System.Serializable]
-public class DeckInfo
+public class DeckInfo : ScriptableObject
 {
     public string deckName;
     public List<CardInfo> cards;
@@ -30,9 +30,11 @@ public class DeckManager : ScriptableObject
 
     public void AddDeck(string deckName)
     {
+        Debug.Log("Adding new deck to DB.");
         if (!decks.Any(deck => deck.deckName == deckName))
         {
             decks.Add(new DeckInfo(deckName));
+            Debug.Log("Deck added to database : " + deckName);
         }
         else
         {
@@ -68,5 +70,17 @@ public class DeckManager : ScriptableObject
     public DeckInfo GetUserDeck(string deckName)
     {
         return decks.FirstOrDefault(deck => deck.deckName == deckName);
+    }
+
+    // Load Database
+    public static DeckManager LoadDatabase()
+    {
+        DeckManager db = ScriptableObject.CreateInstance<DeckManager>();
+        if (PlayerPrefs.HasKey("DeckManager"))
+        {
+            string json = PlayerPrefs.GetString("DeckManager");
+            JsonUtility.FromJsonOverwrite(json, db);
+        }
+        return db;
     }
 }
